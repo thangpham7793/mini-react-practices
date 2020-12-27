@@ -29,5 +29,6 @@
           "react/prop-types": "off"
         }
       }
-    ]
+    ],
+    "exclude": ["*.js"]
 }

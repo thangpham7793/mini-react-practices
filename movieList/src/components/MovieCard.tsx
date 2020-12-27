@@ -1,3 +1,4 @@
+import { Movie } from "../types"
 import React from "react"
 
 type MovieCardProps = {

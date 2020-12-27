@@ -1,8 +1,10 @@
+import { Movie } from "../types"
+
 class MovieService {
   private static _instance: MovieService
 
   async getMovies(): Promise<Movie[]> {
-    return await (await fetch("../src/assets/data.json")).json()
+    return await (await fetch("src/assets/data.json")).json()
   }
 
   static getInstance() {

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react"
+import { Movie } from "../types"
+import { MovieCard } from "../components/MovieCard"
 import MovieService from "../services/MovieService"
 
 export const MovieList: React.FC = () => {
@@ -19,6 +21,10 @@ export const MovieList: React.FC = () => {
   return loading ? (
     <div>Loading</div>
   ) : (
-    <div>{JSON.stringify(movies, null, 4)}</div>
+    <div>
+      {movies?.map((movie) => (
+        <MovieCard movie={movie} key={movie.id} />
+      ))}
+    </div>
   )
 }
