@@ -16,6 +16,7 @@ const ProfileWrapper = styled.div`
 export const Profile = () => {
   const [profile, setProfile] = useState<GithubProfile | null>(null);
   const [repos, setRepos] = useState<GithubProfile[] | null>(null);
+  const [offline, setOffline] = useState(false);
   useEffect(() => {
     async function getProfile() {
       const data = await fetch("https://api.github.com/users/thangpham7793");
@@ -44,12 +45,10 @@ export const Profile = () => {
         }
       }
     }
-    getProfile();
+    getProfile().catch(() => setOffline(true));
   }, []);
 
-  return !profile ? (
-    <ProfileWrapper>Loading</ProfileWrapper>
-  ) : (
+  return profile ? (
     <ProfileWrapper>
       <AvatarWrapper
         src={profile ? (profile.avatarUrl as string) : ""}
@@ -59,5 +58,9 @@ export const Profile = () => {
       {/* fulfilling the API contract of Array<[string, string | number]> */}
       {repos ? <List items={repos.flatMap((r) => Object.entries(r))} /> : null}
     </ProfileWrapper>
+  ) : offline ? (
+    <ProfileWrapper>Failed to Fetch Profile</ProfileWrapper>
+  ) : (
+    <ProfileWrapper>Loading</ProfileWrapper>
   );
 };
