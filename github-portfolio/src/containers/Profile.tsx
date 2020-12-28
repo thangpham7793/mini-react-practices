@@ -57,7 +57,7 @@ export const Profile = () => {
       />
       <List items={Object.entries(profile)} />
       {/* fulfilling the API contract of Array<[string, string | number]> */}
-      {repos ? <List items={repos.map((r) => Object.entries(r)[0])} /> : null}
+      {repos ? <List items={repos.flatMap((r) => Object.entries(r))} /> : null}
     </ProfileWrapper>
   );
 };

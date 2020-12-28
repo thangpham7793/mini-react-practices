@@ -14,10 +14,7 @@ const ListItem = styled.li`
 `;
 
 // simple interface Array<Item>
-type Label = string;
-type Value = string | number;
-type Item = [Label, Value];
-type LinkProps = { items: Array<Item> };
+type LinkProps = { items: Array<[string, string | number]> };
 
 // NOTE: logics still tied to component (essentially like a factory for different list items), but this is display logic, so maybe it should live in the displaying component?
 // Different types of lists: text, url, special, imageUrl
