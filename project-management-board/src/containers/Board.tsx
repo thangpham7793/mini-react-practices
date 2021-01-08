@@ -16,11 +16,18 @@ const BoardWrapper = styled.div`
   }
 `;
 
+const Alert = styled.div`
+  text-align: center;
+`;
+
 export const Board = () => {
   const [tickets, setTickets] = useState<SingleTicket[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    getTickets().then((tickets) => setTickets(tickets));
+    getTickets()
+      .then((tickets) => setTickets(tickets))
+      .catch((error) => setError(error));
   }, []);
 
   const lanes = [
@@ -32,13 +39,17 @@ export const Board = () => {
 
   return (
     <BoardWrapper>
-      {lanes.map(({ id, title }) => (
-        <Lane
-          tickets={tickets.filter((t) => t.lane === title)}
-          key={id}
-          title={title}
-        />
-      ))}
+      {error ? (
+        <Alert>{error.message}</Alert>
+      ) : (
+        lanes.map(({ id, title }) => (
+          <Lane
+            tickets={tickets.filter((t) => t.lane === title)}
+            key={id}
+            title={title}
+          />
+        ))
+      )}
     </BoardWrapper>
   );
 };
