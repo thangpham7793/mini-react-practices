@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Header } from "../components/Header/Header";
+import { TicketContextProvider } from "../contexts/TicketContextProvider";
 import { Board } from "./Board";
 
 const GlobalStyle = createGlobalStyle`
@@ -24,8 +25,10 @@ function App() {
     <>
       <GlobalStyle />
       <AppWrapper>
-        <Header />
-        <Board />
+        <TicketContextProvider>
+          <Header />
+          <Board />
+        </TicketContextProvider>
       </AppWrapper>
     </>
   );

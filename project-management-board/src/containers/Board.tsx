@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import faker from "faker";
 import { Lane } from "../components/Lane/Lane";
-import { LaneType, SingleTicket } from "../components/types";
-import { getTickets } from "../services/api";
+import { LaneType } from "../components/types";
+import { useTickets } from "../contexts/TicketContextProvider";
 
 const BoardWrapper = styled.div`
   justify-content: space-evenly;
@@ -21,14 +20,7 @@ const Alert = styled.div`
 `;
 
 export const Board = () => {
-  const [tickets, setTickets] = useState<SingleTicket[]>([]);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    getTickets()
-      .then((tickets) => setTickets(tickets))
-      .catch((error) => setError(error));
-  }, []);
+  const { error, tickets } = useTickets();
 
   const lanes = [
     { id: 1, title: LaneType.TODO },
