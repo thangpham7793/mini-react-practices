@@ -1,7 +1,7 @@
-import { SingleTicket } from "../components/types";
+import { SingleTicket } from "../types";
 import React from "react";
 
-interface TicketContext {
+export interface TicketContext {
   tickets: SingleTicket[];
   error: Error | null;
 }

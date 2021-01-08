@@ -11,3 +11,8 @@ export type SingleTicket = {
   body: string;
   lane: LaneType;
 };
+
+export type LaneConfig = {
+  id: number;
+  title: LaneType;
+};

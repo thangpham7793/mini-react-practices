@@ -1,4 +1,4 @@
-import { SingleTicket } from "../components/types";
+import { SingleTicket } from "../types";
 import React, { FC, useEffect, useState } from "react";
 import TicketContext from "./TicketContext";
 import { getTickets } from "../services/api";

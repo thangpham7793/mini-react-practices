@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Lane } from "../components/Lane/Lane";
-import { LaneType } from "../components/types";
+import { LaneConfig } from "../types";
 import { useTickets } from "../contexts/TicketContextProvider";
 
 const BoardWrapper = styled.div`
@@ -19,22 +19,19 @@ const Alert = styled.div`
   text-align: center;
 `;
 
-export const Board = () => {
-  const { error, tickets } = useTickets();
+interface BoardProps {
+  lanes?: LaneConfig[];
+}
 
-  const lanes = [
-    { id: 1, title: LaneType.TODO },
-    { id: 2, title: LaneType.IN_PROGRES },
-    { id: 3, title: LaneType.REVIEW },
-    { id: 4, title: LaneType.DONE },
-  ];
+export const Board = ({ lanes }: BoardProps) => {
+  const { error, tickets } = useTickets();
 
   return (
     <BoardWrapper>
       {error ? (
         <Alert>{error.message}</Alert>
       ) : (
-        lanes.map(({ id, title }) => (
+        lanes?.map(({ id, title }) => (
           <Lane
             tickets={tickets.filter((t) => t.lane === title)}
             key={id}

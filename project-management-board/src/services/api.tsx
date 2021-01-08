@@ -1,4 +1,4 @@
-import { LaneType, SingleTicket } from "../components/types";
+import { LaneType, SingleTicket } from "../types";
 import faker from "faker";
 
 function createFakeGetCall<T>(values: T[]) {

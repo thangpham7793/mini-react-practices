@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Ticket } from "../Ticket/Ticket";
-import { LaneType, SingleTicket } from "../types";
+import { LaneType, SingleTicket } from "../../types";
 
 const LaneWrapper = styled.div`
   list-style: none;
