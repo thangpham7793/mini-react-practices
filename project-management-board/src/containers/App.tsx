@@ -1,5 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
+import { Header } from "../components/Header/Header";
+import { Board } from "./Board";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -21,7 +23,10 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <AppWrapper>Hello World</AppWrapper>
+      <AppWrapper>
+        <Header />
+        <Board />
+      </AppWrapper>
     </>
   );
 }
