@@ -30,29 +30,29 @@ const LaneTitle = styled.h2`
   padding-bottom: 10px;
 `;
 
-const TicketWrapper = styled.div`
-  padding: 5%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  &:not(:last-child) {
-    margin-bottom: 1rem;
-  }
-`;
-
 interface LaneProps {
   title: LaneType;
   tickets: SingleTicket[];
 }
 
 export const Lane = ({ title, tickets }: LaneProps) => {
+  const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    if (event.dataTransfer.types.includes("text/html")) {
+      event.preventDefault();
+    }
+  };
+
+  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    const droppedTicket = JSON.parse(event.dataTransfer.getData("text/html"));
+    console.log("Ticket received!", droppedTicket);
+    console.log("Updated ticket", { ...droppedTicket, lane: title });
+  };
+
   return (
-    <LaneWrapper>
+    <LaneWrapper onDragOver={onDragOver} onDrop={onDrop}>
       <LaneTitle>{title}</LaneTitle>
       {tickets.length > 0
-        ? tickets.map((t) => (
-            <Ticket key={t.title} title={t.title} body={t.body} />
-          ))
+        ? tickets.map((ticket) => <Ticket key={ticket.title} {...ticket} />)
         : "Fetching Tickets"}
     </LaneWrapper>
   );

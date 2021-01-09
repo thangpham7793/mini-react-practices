@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { SingleTicket } from "../../types";
 
 const TicketWrapper = styled.div`
   background: darkGray;
@@ -14,14 +15,16 @@ const TicketBody = styled.p`
   width: 100%;
 `;
 
-interface TicketProps {
-  title: string;
-  body: string;
-}
+export const Ticket = ({ title, body, id, lane }: SingleTicket) => {
+  const onTicketDrag = (event: React.DragEvent) => {
+    event.dataTransfer.setData(
+      "text/html",
+      JSON.stringify({ id, title, body, lane })
+    );
+  };
 
-export const Ticket = ({ title, body }: TicketProps) => {
   return (
-    <TicketWrapper>
+    <TicketWrapper draggable={true} onDragStart={onTicketDrag}>
       <TicketTitle>{title}</TicketTitle>
       <TicketBody>{body}</TicketBody>
     </TicketWrapper>

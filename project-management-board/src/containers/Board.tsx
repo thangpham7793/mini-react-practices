@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Lane } from "../components/Lane/Lane";
 import { LaneConfig } from "../types";
-import { useTickets } from "../contexts/TicketContextProvider";
-import { Ticket } from "../components/Ticket/Ticket";
+import { useTicketContext } from "../contexts/TicketContextProvider";
 
 const BoardWrapper = styled.div`
   justify-content: space-around;
@@ -25,7 +24,7 @@ interface BoardProps {
 }
 
 export const Board = ({ lanes }: BoardProps) => {
-  const { error, tickets } = useTickets();
+  const { error, tickets } = useTicketContext();
 
   return (
     <BoardWrapper>
