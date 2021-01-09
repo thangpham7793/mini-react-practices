@@ -48,7 +48,6 @@ export const Lane = ({ title, tickets, loading, dragHandlers }: LaneProps) => {
       {loading
         ? "Fetching Tickets"
         : tickets.map((ticket) => <Ticket key={ticket.title} {...ticket} />)}
-      {title === LaneType.TODO && "Add A Task"}
     </LaneWrapper>
   );
 };
