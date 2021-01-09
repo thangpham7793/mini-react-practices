@@ -2,6 +2,12 @@ import { SingleTicket } from "../types";
 import React, { FC, useContext, useEffect, useReducer } from "react";
 import { getTickets } from "../services/api";
 
+export enum TicketActionType {
+  FETCH_TICKET = "FETCH_TICKET",
+  TICKET_MOVED_TO_NEW_LANE = "TICKET_MOVED_TO_NEW_LANE",
+  ERROR = "ERROR",
+}
+
 type Props = {
   children: React.ReactNode;
 };
@@ -12,16 +18,18 @@ type State = {
 };
 
 type TicketAction = {
-  type: string;
+  type: TicketActionType;
   data?: SingleTicket[] | Error;
 };
 
 const initialState: State = { tickets: [], error: null };
 const ticketReducer = (state: any, action: TicketAction) => {
   switch (action.type) {
-    case "init":
+    case TicketActionType.FETCH_TICKET:
       return { ...state, tickets: action.data as SingleTicket[] };
-    case "error":
+    case TicketActionType.TICKET_MOVED_TO_NEW_LANE:
+      return {};
+    case TicketActionType.ERROR:
       return { ...state, error: action.data as Error };
     default:
       return;
@@ -41,8 +49,12 @@ export const TicketContextProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(ticketReducer, initialState);
   useEffect(() => {
     getTickets()
-      .then((tickets) => dispatch({ type: "init", data: tickets }))
-      .catch((error) => dispatch({ type: "error", data: error }));
+      .then((tickets) =>
+        dispatch({ type: TicketActionType.FETCH_TICKET, data: tickets })
+      )
+      .catch((error) =>
+        dispatch({ type: TicketActionType.ERROR, data: error })
+      );
   }, []);
 
   return (
