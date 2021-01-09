@@ -16,6 +16,7 @@ type Props = {
 type TicketState = {
   tickets: SingleTicket[];
   error: Error | null;
+  loading: boolean;
 };
 
 type TicketMovedPayload = { newLane: LaneType; ticketToUpdate: SingleTicket };
@@ -25,11 +26,12 @@ type TicketAction = {
   payload?: SingleTicket[] | SingleTicket | Error | TicketMovedPayload;
 };
 
-const initialState: TicketState = { tickets: [], error: null };
+const initialState: TicketState = { tickets: [], error: null, loading: true };
 const ticketReducer = (draft: TicketState, action: TicketAction) => {
   switch (action.type) {
     case TicketActionType.FETCH_TICKET:
       draft.tickets = action.payload as SingleTicket[];
+      draft.loading = false;
       return draft;
     case TicketActionType.TICKET_MOVED_TO_NEW_LANE:
       const { ticketToUpdate, newLane } = action.payload as TicketMovedPayload;
@@ -48,10 +50,7 @@ const ticketReducer = (draft: TicketState, action: TicketAction) => {
   }
 };
 
-const TicketContext = React.createContext<TicketState>({
-  tickets: [],
-  error: null,
-});
+const TicketContext = React.createContext<TicketState>(initialState);
 
 export const useTicketContext = () => useContext(TicketContext);
 const TicketDispatchContext = React.createContext<null | React.Dispatch<TicketAction>>(

@@ -37,9 +37,10 @@ const LaneTitle = styled.h2`
 interface LaneProps {
   title: LaneType;
   tickets: SingleTicket[];
+  loading: boolean;
 }
 
-export const Lane = ({ title, tickets }: LaneProps) => {
+export const Lane = ({ title, tickets, loading }: LaneProps) => {
   const ticketDispatch = useTicketContextDispatch();
 
   const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -63,9 +64,10 @@ export const Lane = ({ title, tickets }: LaneProps) => {
   return (
     <LaneWrapper onDragOver={onDragOver} onDrop={onDrop}>
       <LaneTitle>{title}</LaneTitle>
-      {tickets.length > 0
-        ? tickets.map((ticket) => <Ticket key={ticket.title} {...ticket} />)
-        : "Fetching Tickets"}
+      {loading
+        ? "Fetching Tickets"
+        : tickets.map((ticket) => <Ticket key={ticket.title} {...ticket} />)}
+      {tickets.length === 0 ? "Add A Task" : null}
     </LaneWrapper>
   );
 };

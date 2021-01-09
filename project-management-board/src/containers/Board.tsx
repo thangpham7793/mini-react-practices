@@ -24,7 +24,7 @@ interface BoardProps {
 }
 
 export const Board = ({ lanes }: BoardProps) => {
-  const { error, tickets } = useTicketContext();
+  const { error, tickets, loading } = useTicketContext();
 
   return (
     <BoardWrapper>
@@ -36,6 +36,7 @@ export const Board = ({ lanes }: BoardProps) => {
             tickets={tickets.filter((t) => t.lane === title)}
             key={id}
             title={title}
+            loading={loading}
           />
         ))
       )}
