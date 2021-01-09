@@ -19,7 +19,7 @@ type TicketState = {
   loading: boolean;
 };
 
-type TicketMovedPayload = { newLane: LaneType; ticketToUpdate: SingleTicket };
+type TicketMovedPayload = { newLane: LaneType; ticketId: string };
 
 type TicketAction = {
   type: TicketActionType;
@@ -34,9 +34,9 @@ const ticketReducer = (draft: TicketState, action: TicketAction) => {
       draft.loading = false;
       return draft;
     case TicketActionType.TICKET_MOVED_TO_NEW_LANE:
-      const { ticketToUpdate, newLane } = action.payload as TicketMovedPayload;
+      const { ticketId, newLane } = action.payload as TicketMovedPayload;
       for (const ticket of draft.tickets) {
-        if (ticket.id === ticketToUpdate.id) {
+        if (ticket.id === ticketId) {
           ticket.lane = newLane;
           break;
         }

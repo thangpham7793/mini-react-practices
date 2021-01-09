@@ -1,4 +1,4 @@
-import React from "react";
+import React, { DragEventHandler } from "react";
 import styled from "styled-components";
 import { SingleTicket } from "../../types";
 
@@ -15,12 +15,10 @@ const TicketBody = styled.p`
   width: 100%;
 `;
 
-export const Ticket = ({ title, body, id, lane }: SingleTicket) => {
-  const onTicketDrag = (event: React.DragEvent) => {
-    event.dataTransfer.setData(
-      "text/html",
-      JSON.stringify({ id, title, body, lane })
-    );
+export const Ticket = ({ title, body, id }: SingleTicket) => {
+  const onTicketDrag: DragEventHandler = (event) => {
+    // text/plain is treated like a link
+    event.dataTransfer.setData("text/html", id);
   };
 
   return (

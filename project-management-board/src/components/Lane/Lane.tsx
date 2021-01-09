@@ -1,11 +1,7 @@
-import React from "react";
+import React, { DragEventHandler } from "react";
 import styled from "styled-components";
 import { Ticket } from "../Ticket/Ticket";
 import { LaneType, SingleTicket } from "../../types";
-import {
-  TicketActionType,
-  useTicketContextDispatch,
-} from "../../contexts/TicketContextProvider";
 
 const LaneWrapper = styled.div`
   list-style: none;
@@ -34,40 +30,25 @@ const LaneTitle = styled.h2`
   padding-bottom: 10px;
 `;
 
+type DragHandlers = {
+  onDragOver: DragEventHandler;
+  onDrop: DragEventHandler;
+};
 interface LaneProps {
   title: LaneType;
   tickets: SingleTicket[];
   loading: boolean;
+  dragHandlers?: DragHandlers;
 }
 
-export const Lane = ({ title, tickets, loading }: LaneProps) => {
-  const ticketDispatch = useTicketContextDispatch();
-
-  const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    if (event.dataTransfer.types.includes("text/html")) {
-      event.preventDefault();
-    }
-  };
-
-  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    const droppedTicket = JSON.parse(event.dataTransfer.getData("text/html"));
-    console.log("Ticket received!", droppedTicket);
-    ticketDispatch({
-      type: TicketActionType.TICKET_MOVED_TO_NEW_LANE,
-      payload: {
-        ticketToUpdate: droppedTicket as SingleTicket,
-        newLane: title,
-      },
-    });
-  };
-
+export const Lane = ({ title, tickets, loading, dragHandlers }: LaneProps) => {
   return (
-    <LaneWrapper onDragOver={onDragOver} onDrop={onDrop}>
+    <LaneWrapper {...dragHandlers}>
       <LaneTitle>{title}</LaneTitle>
       {loading
         ? "Fetching Tickets"
         : tickets.map((ticket) => <Ticket key={ticket.title} {...ticket} />)}
-      {tickets.length === 0 ? "Add A Task" : null}
+      {title === LaneType.TODO && "Add A Task"}
     </LaneWrapper>
   );
 };
