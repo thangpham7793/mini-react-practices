@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Lane } from "../components/Lane/Lane";
 import { LaneConfig } from "../types";
 import { useTickets } from "../contexts/TicketContextProvider";
+import { Ticket } from "../components/Ticket/Ticket";
 
 const BoardWrapper = styled.div`
-  justify-content: space-evenly;
+  justify-content: space-around;
   display: flex;
   flex-direction: row;
   margin: 1rem 1rem 0 1rem;
@@ -20,7 +21,7 @@ const Alert = styled.div`
 `;
 
 interface BoardProps {
-  lanes?: LaneConfig[];
+  lanes: LaneConfig[];
 }
 
 export const Board = ({ lanes }: BoardProps) => {
@@ -31,7 +32,7 @@ export const Board = ({ lanes }: BoardProps) => {
       {error ? (
         <Alert>{error.message}</Alert>
       ) : (
-        lanes?.map(({ id, title }) => (
+        lanes.map(({ id, title }) => (
           <Lane
             tickets={tickets.filter((t) => t.lane === title)}
             key={id}

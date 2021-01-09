@@ -38,6 +38,12 @@ const tickets: SingleTicket[] = [
     body: faker.lorem.sentence(10),
     lane: LaneType.REVIEW,
   },
+  {
+    id: faker.random.uuid(),
+    title: faker.lorem.words(1),
+    body: faker.lorem.sentence(10),
+    lane: LaneType.REVIEW,
+  },
 ];
 
 export const getTickets = createFakeGetCall(tickets);

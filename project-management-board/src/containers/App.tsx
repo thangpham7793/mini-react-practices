@@ -36,7 +36,6 @@ function App() {
         <TicketContextProvider>
           <Header />
           <Board lanes={lanes} />
-          <Board />
         </TicketContextProvider>
       </AppWrapper>
     </>

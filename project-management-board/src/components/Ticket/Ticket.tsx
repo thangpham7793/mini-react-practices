@@ -4,6 +4,7 @@ import styled from "styled-components";
 const TicketWrapper = styled.div`
   background: darkGray;
   padding: 20px;
+  margin: 5%;
   border-radius: 20px;
 `;
 

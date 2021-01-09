@@ -18,6 +18,7 @@ const LaneWrapper = styled.div`
   @media (max-width: 768px) {
     &:not(:last-child) {
       margin-bottom: 1rem;
+      margin-right: 0;
     }
   }
 `;
@@ -29,8 +30,14 @@ const LaneTitle = styled.h2`
   padding-bottom: 10px;
 `;
 
-const TicketsWrapper = styled.div`
+const TicketWrapper = styled.div`
   padding: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `;
 
 interface LaneProps {
@@ -42,13 +49,11 @@ export const Lane = ({ title, tickets }: LaneProps) => {
   return (
     <LaneWrapper>
       <LaneTitle>{title}</LaneTitle>
-      <TicketsWrapper>
-        {tickets.length > 0
-          ? tickets.map((t) => (
-              <Ticket key={t.title} title={t.title} body={t.body} />
-            ))
-          : "Fetching Tickets"}
-      </TicketsWrapper>
+      {tickets.length > 0
+        ? tickets.map((t) => (
+            <Ticket key={t.title} title={t.title} body={t.body} />
+          ))
+        : "Fetching Tickets"}
     </LaneWrapper>
   );
 };
