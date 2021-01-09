@@ -1,6 +1,7 @@
-import { SingleTicket } from "../types";
-import React, { FC, useContext, useEffect, useReducer } from "react";
+import { LaneType, SingleTicket } from "../types";
+import React, { FC, useContext, useEffect } from "react";
 import { getTickets } from "../services/api";
+import { useImmerReducer } from "use-immer";
 
 export enum TicketActionType {
   FETCH_TICKET = "FETCH_TICKET",
@@ -12,50 +13,66 @@ type Props = {
   children: React.ReactNode;
 };
 
-type State = {
+type TicketState = {
   tickets: SingleTicket[];
   error: Error | null;
 };
 
+type TicketMovedPayload = { newLane: LaneType; ticketToUpdate: SingleTicket };
+
 type TicketAction = {
   type: TicketActionType;
-  data?: SingleTicket[] | Error;
+  payload?: SingleTicket[] | SingleTicket | Error | TicketMovedPayload;
 };
 
-const initialState: State = { tickets: [], error: null };
-const ticketReducer = (state: any, action: TicketAction) => {
+const initialState: TicketState = { tickets: [], error: null };
+const ticketReducer = (draft: TicketState, action: TicketAction) => {
   switch (action.type) {
     case TicketActionType.FETCH_TICKET:
-      return { ...state, tickets: action.data as SingleTicket[] };
+      draft.tickets = action.payload as SingleTicket[];
+      return draft;
     case TicketActionType.TICKET_MOVED_TO_NEW_LANE:
-      return {};
+      const { ticketToUpdate, newLane } = action.payload as TicketMovedPayload;
+      for (const ticket of draft.tickets) {
+        if (ticket.id === ticketToUpdate.id) {
+          ticket.lane = newLane;
+          break;
+        }
+      }
+      return draft;
     case TicketActionType.ERROR:
-      return { ...state, error: action.data as Error };
+      draft.error = action.payload as Error;
+      return draft;
     default:
-      return;
+      return draft;
   }
 };
 
-const TicketContext = React.createContext<State>({
+const TicketContext = React.createContext<TicketState>({
   tickets: [],
   error: null,
 });
-const TicketDispatchContext = React.createContext(ticketReducer);
 
 export const useTicketContext = () => useContext(TicketContext);
-export const useTicketContextDispatch = () => useContext(TicketDispatchContext);
+const TicketDispatchContext = React.createContext<null | React.Dispatch<TicketAction>>(
+  null
+);
+
+// dispatch will be initialized when this hook is called
+export const useTicketContextDispatch = (): React.Dispatch<TicketAction> =>
+  useContext(TicketDispatchContext) as React.Dispatch<TicketAction>;
 
 export const TicketContextProvider: FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(ticketReducer, initialState);
+  const [state, dispatch] = useImmerReducer(ticketReducer, initialState);
   useEffect(() => {
     getTickets()
       .then((tickets) =>
-        dispatch({ type: TicketActionType.FETCH_TICKET, data: tickets })
+        dispatch({ type: TicketActionType.FETCH_TICKET, payload: tickets })
       )
       .catch((error) =>
-        dispatch({ type: TicketActionType.ERROR, data: error })
+        dispatch({ type: TicketActionType.ERROR, payload: error })
       );
-  }, []);
+  }, [dispatch]);
 
   return (
     <TicketDispatchContext.Provider value={dispatch}>

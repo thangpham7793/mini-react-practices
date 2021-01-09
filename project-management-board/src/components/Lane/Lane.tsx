@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Ticket } from "../Ticket/Ticket";
 import { LaneType, SingleTicket } from "../../types";
+import {
+  TicketActionType,
+  useTicketContextDispatch,
+} from "../../contexts/TicketContextProvider";
 
 const LaneWrapper = styled.div`
   list-style: none;
@@ -36,6 +40,8 @@ interface LaneProps {
 }
 
 export const Lane = ({ title, tickets }: LaneProps) => {
+  const ticketDispatch = useTicketContextDispatch();
+
   const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     if (event.dataTransfer.types.includes("text/html")) {
       event.preventDefault();
@@ -45,7 +51,13 @@ export const Lane = ({ title, tickets }: LaneProps) => {
   const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     const droppedTicket = JSON.parse(event.dataTransfer.getData("text/html"));
     console.log("Ticket received!", droppedTicket);
-    console.log("Updated ticket", { ...droppedTicket, lane: title });
+    ticketDispatch({
+      type: TicketActionType.TICKET_MOVED_TO_NEW_LANE,
+      payload: {
+        ticketToUpdate: droppedTicket as SingleTicket,
+        newLane: title,
+      },
+    });
   };
 
   return (
