@@ -1,4 +1,5 @@
 import React from "react";
+import { MyWrappedComponent } from "./types";
 
 type Props = {
   loadingMessage: string;
@@ -6,19 +7,19 @@ type Props = {
 };
 
 type State = {
-  data: any[];
+  data: any;
   loading: string | boolean;
   error: string;
 };
 
-export default function withDataFetching(WrappedComponent: any) {
+export default function withDataFetching(WrappedComponent: MyWrappedComponent) {
   class WithDataFetching extends React.Component<Props, State> {
     static displayName: string;
     constructor(props: Props) {
       super(props);
       this.state = {
         data: [],
-        loading: props.loadingMessage,
+        loading: true,
         error: "",
       };
     }
@@ -43,7 +44,12 @@ export default function withDataFetching(WrappedComponent: any) {
     }
 
     render() {
-      return <WrappedComponent {...this.state} {...this.props} />;
+      return (
+        <WrappedComponent
+          {...this.state}
+          loadingMessage={this.props.loadingMessage}
+        />
+      );
     }
   }
 

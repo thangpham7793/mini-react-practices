@@ -10,3 +10,5 @@ export type QuestionOwner = {
   profile_image: string;
   display_name: string;
 };
+
+export type MyWrappedComponent = (props: any) => JSXElement;
