@@ -1,11 +1,11 @@
-import React, { DragEventHandler } from "react";
+import React from "react";
 import styled from "styled-components";
-import { SingleTicket } from "../../types";
+import { OnTicketDragHandler, SingleTicket } from "../../types";
 
 const TicketWrapper = styled.div`
   background: darkGray;
-  padding: 20px;
-  margin: 5%;
+  padding: 10px;
+  margin: 1rem;
   border-radius: 20px;
 `;
 
@@ -15,14 +15,23 @@ const TicketBody = styled.p`
   width: 100%;
 `;
 
-export const Ticket = ({ title, body, id }: SingleTicket) => {
-  const onTicketDrag: DragEventHandler = (event) => {
-    // text/plain is treated like a link
-    event.dataTransfer.setData("text/html", id);
-  };
+interface TicketProps extends SingleTicket {
+  draggable?: boolean;
+  onDragStart?: OnTicketDragHandler;
+}
 
+export const Ticket = ({
+  title,
+  body,
+  id,
+  draggable = false,
+  onDragStart,
+}: TicketProps) => {
   return (
-    <TicketWrapper draggable={true} onDragStart={onTicketDrag}>
+    <TicketWrapper
+      draggable={draggable}
+      onDragStart={(e) => onDragStart && onDragStart(e, id)}
+    >
       <TicketTitle>{title}</TicketTitle>
       <TicketBody>{body}</TicketBody>
     </TicketWrapper>

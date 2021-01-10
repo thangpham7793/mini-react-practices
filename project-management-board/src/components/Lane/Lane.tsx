@@ -1,7 +1,7 @@
 import React, { DragEventHandler } from "react";
 import styled from "styled-components";
 import { Ticket } from "../Ticket/Ticket";
-import { LaneType, SingleTicket } from "../../types";
+import { LaneType, OnTicketDragHandler, SingleTicket } from "../../types";
 
 const LaneWrapper = styled.div`
   list-style: none;
@@ -29,25 +29,36 @@ const LaneTitle = styled.h2`
   border-bottom: 1px solid darkGray;
   padding-bottom: 10px;
 `;
-
-type DragHandlers = {
-  onDragOver: DragEventHandler;
-  onDrop: DragEventHandler;
-};
 interface LaneProps {
   title: LaneType;
   tickets: SingleTicket[];
   loading: boolean;
-  dragHandlers?: DragHandlers;
+  onDragOver: DragEventHandler;
+  onDrop: DragEventHandler;
+  onDragStart: OnTicketDragHandler;
 }
 
-export const Lane = ({ title, tickets, loading, dragHandlers }: LaneProps) => {
+export const Lane = ({
+  title,
+  tickets,
+  loading,
+  onDragStart,
+  onDrop,
+  onDragOver,
+}: LaneProps) => {
   return (
-    <LaneWrapper {...dragHandlers}>
+    <LaneWrapper onDragOver={onDragOver} onDrop={onDrop}>
       <LaneTitle>{title}</LaneTitle>
       {loading
         ? "Fetching Tickets"
-        : tickets.map((ticket) => <Ticket key={ticket.title} {...ticket} />)}
+        : tickets.map((ticket) => (
+            <Ticket
+              key={ticket.title}
+              {...ticket}
+              draggable={true}
+              onDragStart={onDragStart}
+            />
+          ))}
     </LaneWrapper>
   );
 };

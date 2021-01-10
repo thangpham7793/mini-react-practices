@@ -3,10 +3,13 @@ import ReactDOM from "react-dom";
 import App from "./containers/App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import { TicketContextProvider } from "./contexts/TicketContextProvider";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TicketContextProvider>
+      <App />
+    </TicketContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
