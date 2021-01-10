@@ -1,9 +1,14 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Header } from "../components/Header/Header";
-import { TicketContextProvider } from "../contexts/TicketContextProvider";
+import {
+  TicketContextProvider,
+  useTicketContext,
+  useTicketContextDispatch,
+} from "../contexts/TicketContextProvider";
 import { LaneType } from "../types";
 import { Board } from "./Board";
+import { TicketsContainer } from "./TicketsContainer";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -29,14 +34,20 @@ function App() {
     { id: 4, title: LaneType.DONE },
   ];
 
+  const ticketsContext = useTicketContext();
+  const ticketDispatch = useTicketContextDispatch();
+
   return (
     <>
       <GlobalStyle />
       <AppWrapper>
-        <TicketContextProvider>
-          <Header />
-          <Board lanes={lanes} />
-        </TicketContextProvider>
+        <Header />
+        <Board
+          lanes={lanes}
+          ticketDispatch={ticketDispatch}
+          {...ticketsContext}
+        />
+        <TicketsContainer {...ticketsContext} />
       </AppWrapper>
     </>
   );

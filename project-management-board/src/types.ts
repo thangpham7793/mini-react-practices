@@ -16,3 +16,8 @@ export type LaneConfig = {
   id: number;
   title: LaneType;
 };
+
+export type OnTicketDragHandler = (
+  event: React.DragEvent<HTMLDivElement>,
+  id: string
+) => void;

@@ -13,7 +13,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-type TicketState = {
+export type TicketState = {
   tickets: SingleTicket[];
   error: Error | null;
   loading: boolean;
@@ -21,7 +21,7 @@ type TicketState = {
 
 type TicketMovedPayload = { newLane: LaneType; ticketId: string };
 
-type TicketAction = {
+export type TicketAction = {
   type: TicketActionType;
   payload?: SingleTicket[] | SingleTicket | Error | TicketMovedPayload;
 };

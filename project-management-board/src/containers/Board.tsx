@@ -1,11 +1,11 @@
 import React, { DragEventHandler } from "react";
 import styled from "styled-components";
 import { Lane } from "../components/Lane/Lane";
-import { LaneConfig, LaneType } from "../types";
+import { LaneConfig, LaneType, OnTicketDragHandler } from "../types";
 import {
+  TicketAction,
+  TicketState,
   TicketActionType,
-  useTicketContext,
-  useTicketContextDispatch,
 } from "../contexts/TicketContextProvider";
 
 const BoardWrapper = styled.div`
@@ -23,23 +23,27 @@ const Alert = styled.div`
   text-align: center;
 `;
 
-interface BoardProps {
+interface BoardProps extends TicketState {
   lanes: LaneConfig[];
+  ticketDispatch: React.Dispatch<TicketAction>;
 }
 
-export const Board = ({ lanes }: BoardProps) => {
-  const { error, tickets, loading } = useTicketContext();
-  const ticketDispatch = useTicketContextDispatch();
-
+export const Board = ({
+  lanes,
+  error,
+  tickets,
+  loading,
+  ticketDispatch,
+}: BoardProps) => {
   const onDragOver: DragEventHandler = (event) => {
-    if (event.dataTransfer.types.includes("text/html")) {
+    if (event.dataTransfer.types.includes("id")) {
       event.preventDefault();
     }
   };
   // factoryFunction for onDrop since it needs the title of the target lane
   const createOnDrop = (title: LaneType): DragEventHandler => {
     return (event) => {
-      const droppedTicketId = event.dataTransfer.getData("text/html");
+      const droppedTicketId = event.dataTransfer.getData("id");
       ticketDispatch({
         type: TicketActionType.TICKET_MOVED_TO_NEW_LANE,
         payload: {
@@ -48,6 +52,11 @@ export const Board = ({ lanes }: BoardProps) => {
         },
       });
     };
+  };
+
+  const onDragStart: OnTicketDragHandler = (event, id) => {
+    // text/plain is treated like a link
+    event.dataTransfer.setData("id", id);
   };
 
   return (
@@ -61,10 +70,9 @@ export const Board = ({ lanes }: BoardProps) => {
             key={id}
             title={title}
             loading={loading}
-            dragHandlers={{
-              onDragOver,
-              onDrop: createOnDrop(title),
-            }}
+            onDragStart={onDragStart}
+            onDragOver={onDragOver}
+            onDrop={createOnDrop(title)}
           />
         ))
       )}
