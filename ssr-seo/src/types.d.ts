@@ -1,4 +1,4 @@
-export type Question = {
+export type QuestionItem = {
   question_id: string;
   owner: QuestionOwner;
   title: string;

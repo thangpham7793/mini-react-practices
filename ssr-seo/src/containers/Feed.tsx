@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Card from "../components/Card/Card";
-import { Question } from "../types";
+import { QuestionItem } from "../types";
 import withDataFetching from "../withDataFetching";
 
 const FeedWrapper = styled.div`
@@ -22,7 +22,7 @@ interface FeedProps {
 }
 
 type CardData = {
-  items: Question[];
+  items: QuestionItem[];
 };
 
 const Feed = ({ data, loading, error }: FeedProps) => {
@@ -32,7 +32,7 @@ const Feed = ({ data, loading, error }: FeedProps) => {
 
   return (
     <FeedWrapper>
-      {data.items.map((item: Question) => (
+      {data.items.map((item: QuestionItem) => (
         <Card key={item.question_id} data={item} />
       ))}
     </FeedWrapper>

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Question } from "../../types";
+import { QuestionItem } from "../../types";
 import Owner from "../Owner/Owner";
 
 const CardWrapper = styled.div`
@@ -30,7 +30,7 @@ const Count = styled.div`
 `;
 
 interface CardProps {
-  data: Question;
+  data: QuestionItem;
 }
 
 const Card = ({ data }: CardProps) => (
