@@ -5,6 +5,7 @@ import { QuestionItem } from "../types";
 import { Link, RouteComponentProps } from "react-router-dom";
 import withDataFetching from "../withDataFetching";
 import { PaginationBar } from "../components/PaginationBar/PaginationBar";
+import { Helmet } from "react-helmet";
 
 const FeedWrapper = styled.div`
   display: flex;
@@ -44,18 +45,33 @@ const Feed = ({
   match,
 }: FeedProps) => {
   if (loading || error) {
-    return <Alert>{loading ? loadingMessage : error}</Alert>;
+    return (
+      <>
+        <Helmet>
+          <title>Q&A StackOverflow Feed - Questions</title>
+        </Helmet>
+        <Alert>{loading ? loadingMessage : error}</Alert>
+      </>
+    );
   }
 
   return (
-    <FeedWrapper>
-      {data.items.map((item: QuestionItem) => (
-        <CardLink key={item.question_id} to={`/questions/${item.question_id}`}>
-          <Card key={item.question_id} question={item} />
-        </CardLink>
-      ))}
-      <PaginationBar url={match.url} hasMore={data.has_more} page={page} />
-    </FeedWrapper>
+    <>
+      <Helmet>
+        <title>Q&A StackOverflow Feed - Questions</title>
+      </Helmet>
+      <FeedWrapper>
+        {data.items.map((item: QuestionItem) => (
+          <CardLink
+            key={item.question_id}
+            to={`/questions/${item.question_id}`}
+          >
+            <Card key={item.question_id} question={item} />
+          </CardLink>
+        ))}
+        <PaginationBar url={match.url} hasMore={data.has_more} page={page} />
+      </FeedWrapper>
+    </>
   );
 };
 

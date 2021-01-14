@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import Card from "../components/Card/Card";
 import { QuestionItem } from "../types";
@@ -26,9 +27,14 @@ const Question = ({ data, loading, error, loadingMessage }: QuestionProps) => {
   if (loading || error)
     return <Alert>{loading ? loadingMessage : error}</Alert>;
   return (
-    <QuestionWrapper>
-      <Card question={data.items[0]} />
-    </QuestionWrapper>
+    <>
+      <Helmet>
+        <title>{`Q&A StackOverflow Feed - Question ${data.items[0].question_id}`}</title>
+      </Helmet>
+      <QuestionWrapper>
+        <Card question={data.items[0]} />
+      </QuestionWrapper>
+    </>
   );
 };
 

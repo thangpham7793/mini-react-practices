@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import styled from "styled-components";
 
@@ -28,9 +29,15 @@ const Header = ({ location, history }: HeaderProps) => {
       };
 
   return (
-    <HeaderWrapper onClick={onClick}>
-      <Title>Q&A Feed</Title>
-    </HeaderWrapper>
+    <>
+      <Helmet>
+        <title>Q&A StackOverflow Feed</title>
+        <meta name="description" content="React Community Feed Project" />
+      </Helmet>
+      <HeaderWrapper onClick={onClick}>
+        <Title>Q&A Feed</Title>
+      </HeaderWrapper>
+    </>
   );
 };
 export default withRouter(Header);
