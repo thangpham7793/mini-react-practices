@@ -30,17 +30,17 @@ const Count = styled.div`
 `;
 
 interface CardProps {
-  data: QuestionItem;
+  question: QuestionItem;
 }
 
-const Card = ({ data }: CardProps) => (
+const Card = ({ question }: CardProps) => (
   <CardWrapper>
-    <Title>{data.title}</Title>
+    <Title>{question.title}</Title>
     <Meta>
       <Count>
-        {`Views: ${data.view_count} | Answers: ${data.answer_count}`}
+        {`Views: ${question.view_count} | Answers: ${question.answer_count}`}
       </Count>
-      <Owner data={data.owner} />
+      <Owner owner={question.owner} />
     </Meta>
   </CardWrapper>
 );

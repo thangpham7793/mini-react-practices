@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Card from "../components/Card/Card";
+import { QuestionItem } from "../types";
 import withDataFetching from "../withDataFetching";
 
 const QuestionWrapper = styled.div`
@@ -15,7 +16,7 @@ const Alert = styled.div`
 `;
 
 interface QuestionProps {
-  data: any;
+  data: { has_more: boolean; items: QuestionItem[] };
   loading: boolean;
   error: string;
   loadingMessage: string;
@@ -26,7 +27,7 @@ const Question = ({ data, loading, error, loadingMessage }: QuestionProps) => {
     return <Alert>{loading ? loadingMessage : error}</Alert>;
   return (
     <QuestionWrapper>
-      <Card data={data.items[0]} />
+      <Card question={data.items[0]} />
     </QuestionWrapper>
   );
 };

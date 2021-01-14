@@ -4,10 +4,12 @@ import {
   BrowserRouter as Router,
   Route,
   RouteComponentProps,
+  Switch,
 } from "react-router-dom";
 import Header from "../components/Header/Header";
 import Feed from "./Feed";
 import Question from "./Question";
+import queryString from "query-string";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -28,12 +30,18 @@ const AppWrapper = styled.div`
 const ROOT_API = "https://api.stackexchange.com/2.2/";
 
 const App = () => {
-  const renderFeed = () => (
-    <Feed
-      dataSource={`${ROOT_API}questions?order=desc&sort=activity&tagged=reactjs&site=stackoverflow`}
-      loadingMessage={"Loading ..."}
-    />
-  );
+  const renderFeed = ({ location, ...props }: RouteComponentProps) => {
+    const query = queryString.parse(location.search);
+    const page = query.page ? Number(query.page) : 1;
+    return (
+      <Feed
+        dataSource={`${ROOT_API}questions?order=desc&sort=activity&tagged=reactjs&site=stackoverflow&page=${page}`}
+        page={page}
+        loadingMessage={"Loading ..."}
+        {...props}
+      />
+    );
+  };
 
   const renderQuestion = ({ match }: RouteComponentProps<{ id: string }>) => (
     <Question
@@ -46,10 +54,17 @@ const App = () => {
     <>
       <GlobalStyle />
       <AppWrapper>
-        <Header />
         <Router>
-          <Route exact path="/" render={renderFeed} />
-          <Route path="/questions/:id" render={renderQuestion} />
+          <Header />
+          <Switch>
+            <Route exact path="/" render={(props) => renderFeed(props)} />
+            <Route
+              exact
+              path="/questions"
+              render={(props) => renderFeed(props)}
+            />
+            <Route path="/questions/:id" render={renderQuestion} />
+          </Switch>
         </Router>
       </AppWrapper>
     </>

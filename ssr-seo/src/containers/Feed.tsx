@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Card from "../components/Card/Card";
 import { QuestionItem } from "../types";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import withDataFetching from "../withDataFetching";
+import { PaginationBar } from "../components/PaginationBar/PaginationBar";
 
 const FeedWrapper = styled.div`
   display: flex;
@@ -21,18 +22,27 @@ const CardLink = styled(Link)`
   color: inherit;
 `;
 
-interface FeedProps {
+interface FeedProps extends RouteComponentProps {
   data: CardData;
   loading: boolean;
   error: string;
   loadingMessage: string;
+  page: number;
 }
 
 type CardData = {
+  has_more: boolean;
   items: QuestionItem[];
 };
 
-const Feed = ({ data, loading, error, loadingMessage }: FeedProps) => {
+const Feed = ({
+  data,
+  loading,
+  error,
+  loadingMessage,
+  page,
+  match,
+}: FeedProps) => {
   if (loading || error) {
     return <Alert>{loading ? loadingMessage : error}</Alert>;
   }
@@ -41,9 +51,10 @@ const Feed = ({ data, loading, error, loadingMessage }: FeedProps) => {
     <FeedWrapper>
       {data.items.map((item: QuestionItem) => (
         <CardLink key={item.question_id} to={`/questions/${item.question_id}`}>
-          <Card key={item.question_id} data={item} />
+          <Card key={item.question_id} question={item} />
         </CardLink>
       ))}
+      <PaginationBar url={match.url} hasMore={data.has_more} page={page} />
     </FeedWrapper>
   );
 };

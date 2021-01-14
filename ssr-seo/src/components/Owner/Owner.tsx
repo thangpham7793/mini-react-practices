@@ -21,13 +21,13 @@ const Name = styled.h3`
 `;
 
 interface OwnerProps {
-  data: QuestionOwner;
+  owner: QuestionOwner;
 }
 
-const Owner = ({ data }: OwnerProps) => (
+const Owner = ({ owner }: OwnerProps) => (
   <OwnerWrapper>
-    <Avatar src={data.profile_image} />
-    <Name>{data.display_name}</Name>
+    <Avatar src={owner.profile_image} />
+    <Name>{owner.display_name}</Name>
   </OwnerWrapper>
 );
 

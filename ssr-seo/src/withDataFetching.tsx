@@ -4,6 +4,8 @@ import { MyWrappedComponent } from "./types";
 type Props = {
   loadingMessage: string;
   dataSource: string;
+  page?: number;
+  [key: string]: any;
 };
 
 type State = {
@@ -24,17 +26,23 @@ export default function withDataFetching(WrappedComponent: MyWrappedComponent) {
       };
     }
 
-    async componentDidMount() {
+    private async fetchApi() {
       try {
+        console.log(`Fetch data from ${this.props.dataSource}`);
         const data = await fetch(this.props.dataSource);
         const dataJSON = await data.json();
 
-        if (dataJSON) {
+        if (dataJSON && !dataJSON.error_id) {
           this.setState({
             data: dataJSON,
             loading: false,
           });
+          return;
         }
+        this.setState({
+          loading: false,
+          error: `Failed to Fetch: ${dataJSON.error_name}`,
+        });
       } catch (error) {
         this.setState({
           loading: false,
@@ -43,9 +51,19 @@ export default function withDataFetching(WrappedComponent: MyWrappedComponent) {
       }
     }
 
+    async componentDidMount() {
+      this.fetchApi();
+    }
+
+    async componentDidUpdate(prevProps: Props) {
+      if (prevProps.page !== this.props.page)
+        this.setState({}, () => this.fetchApi());
+    }
+
     render() {
       return (
         <WrappedComponent
+          {...this.props}
           {...this.state}
           loadingMessage={this.props.loadingMessage}
         />
