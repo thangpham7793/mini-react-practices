@@ -1,5 +1,6 @@
 import React from "react";
 import { MyWrappedComponent } from "./types";
+import Cache from "./services/Cache";
 
 type Props = {
   loadingMessage: string;
@@ -26,23 +27,38 @@ export default function withDataFetching(WrappedComponent: MyWrappedComponent) {
       };
     }
 
-    private async fetchApi() {
-      try {
-        console.log(`Fetch data from ${this.props.dataSource}`);
-        const data = await fetch(this.props.dataSource);
-        const dataJSON = await data.json();
+    private updateState(dataJSON: any) {
+      this.setState({
+        data: dataJSON,
+        loading: false,
+      });
+    }
 
-        if (dataJSON && !dataJSON.error_id) {
-          this.setState({
-            data: dataJSON,
-            loading: false,
-          });
-          return;
-        }
+    private async fetchNewData() {
+      console.log(`Fetch data from ${this.props.dataSource}`);
+      const data = await fetch(this.props.dataSource);
+      const dataJSON = await data.json();
+
+      if (dataJSON && !dataJSON.error_id) {
+        Cache.save({ key: this.props.dataSource, value: dataJSON });
+        return dataJSON;
+      } else {
         this.setState({
           loading: false,
           error: `Failed to Fetch: ${dataJSON.error_name}`,
         });
+      }
+    }
+
+    private async fetchApi() {
+      try {
+        let dataJSON = Cache.get({ key: this.props.dataSource });
+        if (!dataJSON) {
+          dataJSON = await this.fetchNewData();
+        }
+        console.log(`Get from cache!`, dataJSON);
+        this.updateState(dataJSON);
+        return;
       } catch (error) {
         this.setState({
           loading: false,
