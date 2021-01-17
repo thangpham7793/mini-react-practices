@@ -3,8 +3,8 @@ import { RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { SubHeader } from "../components/Header/SubHeader";
 import { ListItem } from "../components/ListItem/ListItem";
+import { FetchItemsContextState } from "../contexts/ItemContextProvider";
 import { Item, ItemRouteParams, ShoppingList } from "../types";
-import { DataFetchingState, withDataFetching } from "../withDataFetching";
 
 const ListItemWrapper = styled.div`
   display: flex;
@@ -19,15 +19,30 @@ const Alert = styled.span`
 `;
 
 interface ListProps
-  extends DataFetchingState,
+  extends FetchItemsContextState,
     RouteComponentProps<ItemRouteParams> {
   lists: ShoppingList[];
 }
 
-const List = ({ data, loading, error, match, history, lists }: ListProps) => {
+const List = ({
+  data,
+  loading,
+  error,
+  getItems,
+  match,
+  history,
+  lists,
+}: ListProps) => {
   const items = (data as Item[]).filter(
     ({ listId }) => listId === parseInt(match.params.id)
   );
+
+  React.useEffect(() => {
+    console.log(data);
+    if (!data.length) {
+      getItems();
+    }
+  }, [data, getItems]);
 
   const parentList =
     lists && lists.find(({ id }) => id === parseInt(match.params.id));

@@ -9,7 +9,7 @@ import ListsContextProvider, {
   ListsContext,
 } from "../contexts/ListsContextProvider";
 import ItemContextProvider, {
-  ItemContext,
+  ItemsContext,
 } from "../contexts/ItemContextProvider";
 
 const GlobalStyle = createGlobalStyle`
@@ -38,8 +38,8 @@ const App = () => {
           <ItemContextProvider>
             <ListsContext.Consumer>
               {(listsContext) => (
-                <ItemContext.Consumer>
-                  {(itemContext) => (
+                <ItemsContext.Consumer>
+                  {(itemsContext) => (
                     <Switch>
                       <Route
                         exact
@@ -55,10 +55,10 @@ const App = () => {
                         path="/list/:id/"
                         render={(props) =>
                           listsContext.data &&
-                          itemContext.data && (
+                          itemsContext.data && (
                             <List
                               lists={listsContext.data}
-                              {...itemContext}
+                              {...itemsContext}
                               {...props}
                             />
                           )
@@ -66,7 +66,7 @@ const App = () => {
                       />
                     </Switch>
                   )}
-                </ItemContext.Consumer>
+                </ItemsContext.Consumer>
               )}
             </ListsContext.Consumer>
           </ItemContextProvider>
