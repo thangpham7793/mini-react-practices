@@ -4,6 +4,7 @@ import { Link, RouteComponentProps } from "react-router-dom";
 import { DataFetchingState } from "../withDataFetching";
 import { SubHeader } from "../components/Header/SubHeader";
 import { ShoppingList } from "../types";
+import { ListsContext } from "../contexts/ListsContextProvider";
 
 const ListWrapper = styled.div`
   display: flex;
@@ -32,9 +33,9 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-interface ListsProps extends DataFetchingState, RouteComponentProps {}
+const Lists = ({ history }: RouteComponentProps) => {
+  const { loading, error, data } = React.useContext(ListsContext);
 
-const Lists = ({ loading, error, history, data }: ListsProps) => {
   if (!loading && !error)
     return (
       <>

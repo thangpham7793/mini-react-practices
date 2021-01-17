@@ -11,6 +11,7 @@ import ListsContextProvider, {
 import ItemContextProvider, {
   ItemsContext,
 } from "../contexts/ItemContextProvider";
+import { GlobalContext } from "../contexts/GlobalContext";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -34,48 +35,13 @@ const App = () => {
       <GlobalStyle />
       <AppWrapper>
         <Header />
-        <ListsContextProvider>
-          <ItemContextProvider>
-            <ListsContext.Consumer>
-              {(listsContext) => (
-                <ItemsContext.Consumer>
-                  {(itemsContext) => (
-                    <Switch>
-                      <Route
-                        exact
-                        path="/"
-                        render={(props) =>
-                          listsContext.data && (
-                            <Lists {...listsContext} {...props} />
-                          )
-                        }
-                      />
-                      <Route
-                        path="/list/:id/new"
-                        render={(props) => (
-                          <Form postItem={itemsContext.postItem} {...props} />
-                        )}
-                      />
-                      <Route
-                        path="/list/:id/"
-                        render={(props) =>
-                          listsContext.data &&
-                          itemsContext.data && (
-                            <List
-                              lists={listsContext.data}
-                              {...itemsContext}
-                              {...props}
-                            />
-                          )
-                        }
-                      />
-                    </Switch>
-                  )}
-                </ItemsContext.Consumer>
-              )}
-            </ListsContext.Consumer>
-          </ItemContextProvider>
-        </ListsContextProvider>
+        <GlobalContext>
+          <Switch>
+            <Route exact path="/" component={Lists} />
+            <Route path="/list/:id/new" component={Form} />
+            <Route path="/list/:id/" component={List} />
+          </Switch>
+        </GlobalContext>
       </AppWrapper>
     </>
   );

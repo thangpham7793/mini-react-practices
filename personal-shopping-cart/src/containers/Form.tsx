@@ -1,10 +1,11 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
+
 import { Button } from "../components/Button/Button";
 import { FormItem } from "../components/FormItem/FormItem";
 import { SubHeader } from "../components/Header/SubHeader";
-import { FetchItemsContextState } from "../contexts/ItemContextProvider";
+import { ItemsContext } from "../contexts/ItemContextProvider";
 import { ItemRouteParams } from "../types";
 
 const FormWrapper = styled.div`
@@ -19,10 +20,9 @@ const SubmitButton = styled(Button)`
   margin: 2% 0;
 `;
 
-type FormProps = RouteComponentProps<ItemRouteParams> &
-  Pick<FetchItemsContextState, "postItem">;
+type FormProps = RouteComponentProps<ItemRouteParams>;
 
-export const Form = ({ match, history, postItem }: FormProps) => {
+export const Form = ({ match, history }: FormProps) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     postItem({
@@ -36,6 +36,7 @@ export const Form = ({ match, history, postItem }: FormProps) => {
   const [title, setTitle] = React.useState("");
   const [quantity, setQuantity] = React.useState("");
   const [price, setPrice] = React.useState("");
+  const { postItem } = React.useContext(ItemsContext);
 
   return (
     <>

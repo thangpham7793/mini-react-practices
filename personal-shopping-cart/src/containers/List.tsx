@@ -3,8 +3,9 @@ import { RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { SubHeader } from "../components/Header/SubHeader";
 import { ListItem } from "../components/ListItem/ListItem";
-import { FetchItemsContextState } from "../contexts/ItemContextProvider";
-import { Item, ItemRouteParams, ShoppingList } from "../types";
+import { ItemsContext } from "../contexts/ItemContextProvider";
+import { ListsContext } from "../contexts/ListsContextProvider";
+import { Item, ItemRouteParams } from "../types";
 
 const ListItemWrapper = styled.div`
   display: flex;
@@ -18,22 +19,15 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-interface ListProps
-  extends FetchItemsContextState,
-    RouteComponentProps<ItemRouteParams> {
-  lists: ShoppingList[];
-}
+type ListProps = RouteComponentProps<ItemRouteParams>;
 
-const List = ({
-  data,
-  loading,
-  error,
-  getItems,
-  deleteItem,
-  match,
-  history,
-  lists,
-}: ListProps) => {
+const List = ({ match, history }: ListProps) => {
+  const { getItems, deleteItem, data, loading, error } = React.useContext(
+    ItemsContext
+  );
+
+  const lists = React.useContext(ListsContext).data;
+
   const items = (data as Item[]).filter(
     ({ listId }) => listId === parseInt(match.params.id)
   );
