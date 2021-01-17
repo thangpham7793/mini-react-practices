@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { FetchItemsContextState } from "../../contexts/ItemContextProvider";
 import { Item } from "../../types";
 
 const ListItemWrapper = styled.div`
@@ -15,7 +16,7 @@ const ListItemWrapper = styled.div`
 `;
 
 const Title = styled.h3`
-  flex-basis: 55%;
+  flex-basis: 40%;
   @media screen and (max-width: 500px) {
     flex-basis: 30%;
   }
@@ -26,7 +27,7 @@ const Quantity = styled.span`
   font-weight: bold;
   text-align: right;
   @media screen and (max-width: 500px) {
-    flex-basis: 40%;
+    flex-basis: 30%;
   }
 `;
 
@@ -39,18 +40,26 @@ const Price = styled.span`
   }
 `;
 
-interface ListItemProps {
+const Delete = styled.button`
+  flex-basis: 15%;
+  @media screen and (max-width: 500px) {
+    flex-basis: 10%;
+  }
+  margin-left: 2%;
+`;
+
+type ListItemProps = Pick<FetchItemsContextState, "deleteItem"> & {
   item: Item;
-}
+};
 
 export const ListItem = ({
-  item: { title, quantity, price },
-}: ListItemProps) => {
-  return (
-    <ListItemWrapper>
-      <Title>{title}</Title>
-      <Quantity>{`Quantity: ${quantity}`}</Quantity>
-      <Price>{`$ ${price}`}</Price>
-    </ListItemWrapper>
-  );
-};
+  item: { title, quantity, price, id },
+  deleteItem,
+}: ListItemProps) => (
+  <ListItemWrapper>
+    <Title>{title}</Title>
+    <Quantity>{`Quantity: ${quantity}`}</Quantity>
+    <Price>{`$ ${price}`}</Price>
+    <Delete onClick={() => deleteItem(id)}>Delete</Delete>
+  </ListItemWrapper>
+);

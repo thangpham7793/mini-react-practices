@@ -11,6 +11,13 @@ export type Item = {
   listId: number;
 };
 
+export type PostItemDTO = {
+  title: string;
+  quantity: number;
+  price: number;
+  listId: number;
+};
+
 export type ItemRouteParams = {
   id: string;
 };

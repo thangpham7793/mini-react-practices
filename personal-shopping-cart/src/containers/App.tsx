@@ -50,7 +50,12 @@ const App = () => {
                           )
                         }
                       />
-                      <Route path="/list/:id/new" component={Form} />
+                      <Route
+                        path="/list/:id/new"
+                        render={(props) => (
+                          <Form postItem={itemsContext.postItem} {...props} />
+                        )}
+                      />
                       <Route
                         path="/list/:id/"
                         render={(props) =>

@@ -29,6 +29,7 @@ const List = ({
   loading,
   error,
   getItems,
+  deleteItem,
   match,
   history,
   lists,
@@ -38,7 +39,6 @@ const List = ({
   );
 
   React.useEffect(() => {
-    console.log(data);
     if (!data.length) {
       getItems();
     }
@@ -54,11 +54,14 @@ const List = ({
           <SubHeader
             title={parentList?.title}
             goBack={() => history.goBack()}
-            openForm={() => history.push(`${match}/new`)}
+            openForm={() => history.push(`${match.params.id}/new`)}
           />
         )}
         <ListItemWrapper>
-          {items && items.map((item) => <ListItem key={item.id} item={item} />)}
+          {items &&
+            items.map((item) => (
+              <ListItem deleteItem={deleteItem} key={item.id} item={item} />
+            ))}
         </ListItemWrapper>
       </>
     );

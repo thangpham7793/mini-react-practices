@@ -24,12 +24,12 @@ const Input = styled.input`
 `;
 
 type FormItemProps = {
-  handleOnChange?: () => void;
+  handleOnChange: any;
   id: string;
   label: string;
   type?: string;
-  placeholder?: string;
-  value?: string;
+  placeholder: string;
+  value: string;
 };
 
 export const FormItem = ({
@@ -48,7 +48,7 @@ export const FormItem = ({
       id={id}
       placeholder={placeholder}
       value={value}
-      onChange={handleOnChange}
+      onChange={({ target: { value } }) => handleOnChange(value)}
     />
   </FormItemWrapper>
 );
