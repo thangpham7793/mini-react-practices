@@ -2,8 +2,8 @@ import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Route, Switch } from "react-router-dom";
 import { Header } from "../components/Header/Header";
-import { Lists } from "./Lists";
-import { List } from "./List";
+import Lists from "./Lists";
+import List from "./List";
 import { Form } from "./Form";
 
 const GlobalStyle = createGlobalStyle`

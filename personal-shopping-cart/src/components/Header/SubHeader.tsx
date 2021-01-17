@@ -1,5 +1,51 @@
 import React from "react";
+import styled from "styled-components";
+import { Button } from "../Button/Button";
 
-export const SubHeader = () => {
-  return <div></div>;
+const SubHeaderWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: navajowhite;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  flex-basis: 60%;
+  &:first-child {
+    margin-left: 20%;
+  }
+
+  &:last-child {
+    margin-right: 20%;
+  }
+`;
+
+const SubHeaderButton = styled(Button)`
+  margin: 10px 5%;
+`;
+
+type SubHeaderHandler = () => void;
+
+interface SubHeaderProps {
+  title?: string;
+  openForm?: SubHeaderHandler;
+  goBack?: SubHeaderHandler;
+}
+
+export const SubHeader = ({ goBack, title, openForm }: SubHeaderProps) => {
+  return (
+    <SubHeaderWrapper>
+      {goBack && (
+        <SubHeaderButton onClick={goBack}>{`< Go Back`}</SubHeaderButton>
+      )}
+      <Title>{title}</Title>
+      {openForm && (
+        <SubHeaderButton onClick={openForm as SubHeaderHandler}>
+          {" "}
+          + Add Item
+        </SubHeaderButton>
+      )}
+    </SubHeaderWrapper>
+  );
 };
