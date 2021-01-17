@@ -1,13 +1,12 @@
 import React, { FC } from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { Item, List } from "./types";
+import { Item, ShoppingList } from "./types";
 
 export interface WithDataFetchingProps {
   dataSource: string;
 }
 
 export interface DataFetchingState {
-  data: List[] | Item[];
+  data: ShoppingList[] | Item[];
   loading: boolean;
   error: string;
 }

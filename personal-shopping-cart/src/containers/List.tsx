@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { SubHeader } from "../components/Header/SubHeader";
 import { ListItem } from "../components/ListItem/ListItem";
-import { Item, ItemRouteParams } from "../types";
+import { Item, ItemRouteParams, ShoppingList } from "../types";
 import { DataFetchingState, withDataFetching } from "../withDataFetching";
 
 const ListItemWrapper = styled.div`
@@ -20,20 +20,24 @@ const Alert = styled.span`
 
 interface ListProps
   extends DataFetchingState,
-    RouteComponentProps<ItemRouteParams> {}
+    RouteComponentProps<ItemRouteParams> {
+  lists: ShoppingList[];
+}
 
-const List = ({ data, loading, error, match, history }: ListProps) => {
-  const items =
-    data &&
-    (data as Item[]).filter(
-      ({ listId }) => listId === parseInt(match.params.id)
-    );
+const List = ({ data, loading, error, match, history, lists }: ListProps) => {
+  const items = (data as Item[]).filter(
+    ({ listId }) => listId === parseInt(match.params.id)
+  );
+
+  const parentList =
+    lists && lists.find(({ id }) => id === parseInt(match.params.id));
 
   if (!loading && !error)
     return (
       <>
         {history && (
           <SubHeader
+            title={parentList?.title}
             goBack={() => history.goBack()}
             openForm={() => history.push(`${match}/new`)}
           />
@@ -47,7 +51,4 @@ const List = ({ data, loading, error, match, history }: ListProps) => {
   return <Alert>{loading ? "Loading..." : error}</Alert>;
 };
 
-const dataSource =
-  "https://my-json-server.typicode.com/pranayfpackt/-React-Projects/items";
-
-export default withDataFetching({ dataSource })(List);
+export default List;

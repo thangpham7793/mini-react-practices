@@ -1,4 +1,4 @@
-export type List = {
+export type ShoppingList = {
   id: number;
   title: string;
 };

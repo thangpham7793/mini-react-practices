@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Link, RouteComponentProps } from "react-router-dom";
-import { DataFetchingState, withDataFetching } from "../withDataFetching";
+import { DataFetchingState } from "../withDataFetching";
 import { SubHeader } from "../components/Header/SubHeader";
-import { List } from "../types";
+import { ShoppingList } from "../types";
 
 const ListWrapper = styled.div`
   display: flex;
@@ -34,14 +34,14 @@ const Alert = styled.span`
 
 interface ListsProps extends DataFetchingState, RouteComponentProps {}
 
-const Lists = ({ data, loading, error, history }: ListsProps) => {
+const Lists = ({ loading, error, history, data }: ListsProps) => {
   if (!loading && !error)
     return (
       <>
         {history && <SubHeader title="Your Lists" />}
         <ListWrapper>
           {data &&
-            (data as List[]).map((list) => (
+            (data as ShoppingList[]).map((list) => (
               <ListLink key={list.id} to={`list/${list.id}`}>
                 <Title>{list.title}</Title>
               </ListLink>
@@ -53,7 +53,4 @@ const Lists = ({ data, loading, error, history }: ListsProps) => {
   return <Alert>{loading ? "Loading..." : error}</Alert>;
 };
 
-const dataSource =
-  "https://my-json-server.typicode.com/PacktPublishing/React-Projects/lists";
-
-export default withDataFetching({ dataSource })(Lists);
+export default Lists;

@@ -5,6 +5,12 @@ import { Header } from "../components/Header/Header";
 import Lists from "./Lists";
 import List from "./List";
 import { Form } from "./Form";
+import ListsContextProvider, {
+  ListsContext,
+} from "../contexts/ListsContextProvider";
+import ItemContextProvider, {
+  ItemContext,
+} from "../contexts/ItemContextProvider";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -28,11 +34,43 @@ const App = () => {
       <GlobalStyle />
       <AppWrapper>
         <Header />
-        <Switch>
-          <Route exact path="/" component={Lists} />
-          <Route path="/list/:id/new" component={Form} />
-          <Route path="/list/:id/" component={List} />
-        </Switch>
+        <ListsContextProvider>
+          <ItemContextProvider>
+            <ListsContext.Consumer>
+              {(listsContext) => (
+                <ItemContext.Consumer>
+                  {(itemContext) => (
+                    <Switch>
+                      <Route
+                        exact
+                        path="/"
+                        render={(props) =>
+                          listsContext.data && (
+                            <Lists {...listsContext} {...props} />
+                          )
+                        }
+                      />
+                      <Route path="/list/:id/new" component={Form} />
+                      <Route
+                        path="/list/:id/"
+                        render={(props) =>
+                          listsContext.data &&
+                          itemContext.data && (
+                            <List
+                              lists={listsContext.data}
+                              {...itemContext}
+                              {...props}
+                            />
+                          )
+                        }
+                      />
+                    </Switch>
+                  )}
+                </ItemContext.Consumer>
+              )}
+            </ListsContext.Consumer>
+          </ItemContextProvider>
+        </ListsContextProvider>
       </AppWrapper>
     </>
   );
